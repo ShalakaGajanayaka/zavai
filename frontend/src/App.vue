@@ -1,16 +1,17 @@
-<script setup>
-import ProductList from './components/ProductList.vue';
-</script>
+<script setup></script>
 
 <template>
   <main>
-    <ProductList />
+    <router-view />
   </main>
 </template>
 
 <style>
 body {
-    margin: 0;
-    background-color: #f4f4f4;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+main {
+  padding: 20px;
 }
 </style>

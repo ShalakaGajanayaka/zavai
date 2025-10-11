@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
 // products ටික store කරගන්න reactive variable එකක්
 const products = ref([]);
@@ -10,11 +10,11 @@ onMounted(async () => {
   try {
     // අපේ Laravel API එකට request එක යවනවා
     // Laravel project එක run වෙන port එක බලලා මෙතනට දාන්න (සාමාන්‍යයෙන් 8000)
-    const response = await axios.get('http://127.0.0.1:8000/api/products');
+    const response = await axios.get("http://127.0.0.1:8000/api/products");
     // API එකෙන් එන data ටික products variable එකට දාගන්නවා
     products.value = response.data;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
   }
 });
 </script>
@@ -23,13 +23,24 @@ onMounted(async () => {
   <div class="product-gallery">
     <h1>Our T-Shirt Collection</h1>
     <div class="product-grid">
-      <!-- v-for එකෙන් products array එකේ තියෙන එකින් එක අරන් පෙන්නනවා -->
-      <div v-for="product in products" :key="product.id" class="product-card">
-        <img :src="product.image_url" :alt="product.name" class="product-image">
-        <h2>{{ product.name }}</h2>
-        <p class="product-color">Color: {{ product.color }}</p>
-        <p class="product-price">Rs. {{ product.price }}</p>
-      </div>
+      <!-- v-for එක තියෙන div එක <router-link> එකකින් replace කරනවා -->
+      <router-link
+        v-for="product in products"
+        :key="product.id"
+        :to="`/product/${product.id}`"
+        class="product-card-link"
+      >
+        <div class="product-card">
+          <img
+            :src="product.image_url"
+            :alt="product.name"
+            class="product-image"
+          />
+          <h2>{{ product.name }}</h2>
+          <p class="product-color">Color: {{ product.color }}</p>
+          <p class="product-price">Rs. {{ product.price }}</p>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -49,7 +60,12 @@ onMounted(async () => {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
 }
 .product-image {
   max-width: 100%;

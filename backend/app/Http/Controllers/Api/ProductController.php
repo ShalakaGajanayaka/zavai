@@ -28,9 +28,11 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        //
+        // Laravel's Route Model Binding automatically finds the product by its ID
+        // and returns a 404 error if not found. So simple!
+        return response()->json($product);
     }
 
     /**
