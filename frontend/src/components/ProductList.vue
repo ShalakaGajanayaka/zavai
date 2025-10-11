@@ -20,60 +20,27 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="product-gallery">
-    <h1>Our T-Shirt Collection</h1>
-    <div class="product-grid">
-      <!-- v-for එක තියෙන div එක <router-link> එකකින් replace කරනවා -->
+  <!-- අපි මෙතනට class එකතු කරනවා -->
+  <div class="container mx-auto px-4">
+    <h1 class="text-4xl font-bold text-center my-8 text-gray-800">Our T-Shirt Collection</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <router-link
         v-for="product in products"
         :key="product.id"
         :to="`/product/${product.id}`"
-        class="product-card-link"
+        class="group"
       >
-        <div class="product-card">
-          <img
-            :src="product.image_url"
-            :alt="product.name"
-            class="product-image"
-          />
-          <h2>{{ product.name }}</h2>
-          <p class="product-color">Color: {{ product.color }}</p>
-          <p class="product-price">Rs. {{ product.price }}</p>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 transition-all duration-300">
+          <img :src="product.image_url" :alt="product.name" class="w-full h-64 object-cover">
+          <div class="p-4">
+            <h2 class="text-xl font-semibold text-gray-900 truncate">{{ product.name }}</h2>
+            <p class="text-gray-600 mt-1">Color: {{ product.color }}</p>
+            <p class="text-lg font-bold text-gray-800 mt-2">Rs. {{ product.price }}</p>
+          </div>
         </div>
       </router-link>
     </div>
   </div>
 </template>
 
-<style scoped>
-.product-gallery {
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* එක පේලියට 3ක් පෙන්නන්න */
-  gap: 20px;
-  padding: 20px;
-}
-.product-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
 
-.product-card-link {
-  text-decoration: none;
-  color: inherit;
-}
-.product-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 5px;
-}
-.product-price {
-  font-weight: bold;
-  color: #2c3e50;
-}
-</style>
