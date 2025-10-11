@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { useCartStore } from "../stores/cart";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 const route = useRoute(); // URL එකේ තියෙන data ගන්න
 const product = ref(null); // තනි product එකේ data තියාගන්න
@@ -10,7 +11,7 @@ const isLoading = ref(true);
 const cartStore = useCartStore();
 
 onMounted(async () => {
-  const productId = route.params.id; // URL එකෙන් id එක ගන්නවා (උදා: /product/2 නම් id එක 2)
+  const productId = route.params.id;
   try {
     const response = await axios.get(
       `http://127.0.0.1:8000/api/products/${productId}`
@@ -19,7 +20,7 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error fetching product details:", error);
   } finally {
-    isLoading.value = false;
+    isLoading.value = false; // Data load වෙලා ඉවර වුනාම false කරනවා
   }
 });
 
@@ -34,8 +35,10 @@ function handleAddToCart() {
 <template>
   <div>
     <router-link to="/">&larr; Back to Products</router-link>
-    <div v-if="isLoading" class="loading">Loading...</div>
-    <div v-if="product" class="product-detail">
+    <div v-if="isLoading">
+      <LoadingSpinner />
+    </div>
+    <div v-else-if="product" class="mt-6 flex flex-col md:flex-row gap-8">
       <img
         :src="product.image_url"
         :alt="product.name"
@@ -50,6 +53,9 @@ function handleAddToCart() {
           Add to Cart
         </button>
       </div>
+    </div>
+    <div v-else class="text-center py-10 text-xl text-red-500">
+      Sorry, the product could not be found.
     </div>
   </div>
 </template>
