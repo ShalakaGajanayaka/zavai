@@ -12,6 +12,14 @@ export const useCartStore = defineStore("cart", {
     itemCount: (state) => {
       return state.items.reduce((total, item) => total + item.quantity, 0);
     },
+    // NEW GETTER: Calculate the total price of all items
+    totalPrice: (state) => {
+      return state.items
+        .reduce((total, item) => {
+          return total + item.price * item.quantity;
+        }, 0)
+        .toFixed(2); // .toFixed(2) for showing two decimal places
+    },
   },
 
   // Actions: Functions that change the state
@@ -26,6 +34,27 @@ export const useCartStore = defineStore("cart", {
       } else {
         // If it's a new product, add it to the items array with a quantity of 1
         this.items.push({ ...product, quantity: 1 });
+      }
+    },
+    // NEW ACTION: Remove an item completely from the cart
+    removeFromCart(productId) {
+      this.items = this.items.filter((item) => item.id !== productId);
+    },
+    // NEW ACTION: Increment item quantity
+    incrementQuantity(productId) {
+      const item = this.items.find((item) => item.id === productId);
+      if (item) {
+        item.quantity++;
+      }
+    },
+    // NEW ACTION: Decrement item quantity
+    decrementQuantity(productId) {
+      const item = this.items.find((item) => item.id === productId);
+      if (item && item.quantity > 1) {
+        item.quantity--;
+      } else if (item && item.quantity === 1) {
+        // If quantity is 1 and user clicks '-', remove the item
+        this.removeFromCart(productId);
       }
     },
   },
