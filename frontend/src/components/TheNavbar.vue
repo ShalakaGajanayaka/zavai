@@ -20,9 +20,10 @@
         </div>
 
         <!-- Secondary Nav (Cart Icon) -->
-        <div>
+        <div class="relative">
+          <!-- <-- මේක තමයි වැදගත්ම class එක -->
           <a href="#" class="text-gray-600 hover:text-blue-500">
-            <!-- Shopping Cart Icon -->
+            <!-- Shopping Cart Icon SVG is here -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6"
@@ -38,6 +39,13 @@
               />
             </svg>
           </a>
+          <!-- Notification Badge -->
+          <span
+            v-if="cartStore.itemCount > 0"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+          >
+            {{ cartStore.itemCount }}
+          </span>
         </div>
       </div>
     </div>
@@ -45,7 +53,9 @@
 </template>
 
 <script setup>
-// No script needed for now
+import { useCartStore } from "../stores/cart";
+
+const cartStore = useCartStore();
 </script>
 
 <style scoped>

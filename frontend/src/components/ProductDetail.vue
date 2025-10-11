@@ -2,10 +2,12 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
+import { useCartStore } from "../stores/cart";
 
 const route = useRoute(); // URL එකේ තියෙන data ගන්න
 const product = ref(null); // තනි product එකේ data තියාගන්න
 const isLoading = ref(true);
+const cartStore = useCartStore();
 
 onMounted(async () => {
   const productId = route.params.id; // URL එකෙන් id එක ගන්නවා (උදා: /product/2 නම් id එක 2)
@@ -20,6 +22,13 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+function handleAddToCart() {
+  if (product.value) {
+    cartStore.addToCart(product.value);
+    alert(`${product.value.name} was added to the cart!`); // Simple feedback
+  }
+}
 </script>
 
 <template>
@@ -37,7 +46,9 @@ onMounted(async () => {
         <p class="price">Rs. {{ product.price }}</p>
         <p class="description">{{ product.description }}</p>
         <p class="color"><strong>Color:</strong> {{ product.color }}</p>
-        <button class="add-to-cart-btn">Add to Cart</button>
+        <button @click="handleAddToCart" class="add-to-cart-btn">
+          Add to Cart
+        </button>
       </div>
     </div>
   </div>
