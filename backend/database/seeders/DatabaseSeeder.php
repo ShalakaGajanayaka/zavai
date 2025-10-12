@@ -20,6 +20,13 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        // Create a default admin user
+        User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'), // password is 'password'
+        ]);
+
         $this->call([
             ProductSeeder::class,
         ]);
