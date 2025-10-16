@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
-import LoadingSpinner from "./LoadingSpinner.vue"; 
+import apiClient from "../api/axios"; // axios වෙනුවට අපේ apiClient එක import කරගන්නවා
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 // products ටික store කරගන්න reactive variable එකක්
 const products = ref([]);
@@ -11,14 +11,14 @@ const isLoading = ref(true); // isLoading state එකක් හදාගන්�
 onMounted(async () => {
   try {
     // අපේ Laravel API එකට request එක යවනවා
-    // Laravel project එක run වෙන port එක බලලා මෙතනට දාන්න (සාමාන්‍යයෙන් 8000)
-    const response = await axios.get("http://127.0.0.1:8000/api/products");
+    // අපි හදාගත් apiClient එක හරහා request එක යවන නිසා full URL එක ඕන නෑ.
+    const response = await apiClient.get("/products");
     // API එකෙන් එන data ටික products variable එකට දාගන්නවා
     products.value = response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
   } finally {
-    //  Data load වෙලා ඉවර වුනාම (සාර්ථක වුනත්, අසාර්ථක වුනත්) isLoading false කරනවා.
+    // Data load වෙලා ඉවර වුනාම (සාර්ථක වුනත්, අසාර්ථක වුනත්) isLoading false කරනවා.
     isLoading.value = false;
   }
 });
@@ -31,10 +31,13 @@ onMounted(async () => {
       Our T-Shirt Collection
     </h1>
     <!-- v-if/v-else දාලා spinner එකයි content එකයි මාරු කරනවා -->
-    <div v-if="isLoading">
+    <div v-if="isLoading" class="min-h-[50vh] flex items-center justify-center">
       <LoadingSpinner />
     </div>
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      v-else-if="products.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+    >
       <router-link
         v-for="product in products"
         :key="product.id"
@@ -60,6 +63,9 @@ onMounted(async () => {
           </div>
         </div>
       </router-link>
+    </div>
+    <div v-else class="text-center py-10 text-xl text-gray-500">
+      <p>No products found at the moment. Please check back later!</p>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import axios from "axios";
+import apiClient from "../api/axios"; // axios වෙනුවට apiClient import කරගන්නවා
 import { useCartStore } from "../stores/cart";
 import LoadingSpinner from "./LoadingSpinner.vue";
 
@@ -13,12 +13,11 @@ const cartStore = useCartStore();
 onMounted(async () => {
   const productId = route.params.id;
   try {
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/products/${productId}`
-    );
+    const response = await apiClient.get(`/products/${productId}`); // apiClient පාවිච්චි කරනවා
     product.value = response.data;
   } catch (error) {
     console.error("Error fetching product details:", error);
+    // 404 error එකක් ආවොත් product එක null විදිහට තියෙනවා
   } finally {
     isLoading.value = false; // Data load වෙලා ඉවර වුනාම false කරනවා
   }
@@ -27,29 +26,53 @@ onMounted(async () => {
 function handleAddToCart() {
   if (product.value) {
     cartStore.addToCart(product.value);
-    alert(`${product.value.name} was added to the cart!`); // Simple feedback
+    // අපි පස්සේ මේ alert එක වෙනුවට ලස්සන notification එකක් දාමු
+    alert(`${product.value.name} was added to the cart!`);
   }
 }
 </script>
 
 <template>
-  <div>
-    <router-link to="/">&larr; Back to Products</router-link>
-    <div v-if="isLoading">
+  <div class="container mx-auto p-4 md:p-8">
+    <router-link
+      to="/"
+      class="inline-block mb-6 text-blue-600 hover:underline"
+      >&larr; Back to Products</router-link
+    >
+    <div
+      v-if="isLoading"
+      class="min-h-[50vh] flex items-center justify-center"
+    >
       <LoadingSpinner />
     </div>
-    <div v-else-if="product" class="mt-6 flex flex-col md:flex-row gap-8">
-      <img
-        :src="product.image_url"
-        :alt="product.name"
-        class="product-detail-image"
-      />
-      <div class="product-info">
-        <h1>{{ product.name }}</h1>
-        <p class="price">Rs. {{ product.price }}</p>
-        <p class="description">{{ product.description }}</p>
-        <p class="color"><strong>Color:</strong> {{ product.color }}</p>
-        <button @click="handleAddToCart" class="add-to-cart-btn">
+    <div
+      v-else-if="product"
+      class="bg-white p-6 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8"
+    >
+      <!-- Image Column -->
+      <div>
+        <img
+          :src="product.image_url"
+          :alt="product.name"
+          class="w-full h-auto object-cover rounded-md"
+        />
+      </div>
+      <!-- Details Column -->
+      <div class="flex flex-col justify-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">
+          {{ product.name }}
+        </h1>
+        <p class="text-3xl font-light text-gray-700 my-3">
+          Rs. {{ product.price }}
+        </p>
+        <p class="text-gray-600 leading-relaxed">{{ product.description }}</p>
+        <p class="text-gray-600 mt-4">
+          <strong>Color:</strong> {{ product.color }}
+        </p>
+        <button
+          @click="handleAddToCart"
+          class="mt-6 w-full md:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+        >
           Add to Cart
         </button>
       </div>
@@ -59,41 +82,3 @@ function handleAddToCart() {
     </div>
   </div>
 </template>
-
-<style scoped>
-.loading {
-  text-align: center;
-  padding: 50px;
-  font-size: 1.5em;
-}
-.product-detail {
-  display: flex;
-  gap: 30px;
-  margin-top: 20px;
-  background: white;
-  padding: 30px;
-  border-radius: 8px;
-}
-.product-detail-image {
-  max-width: 400px;
-  border-radius: 8px;
-}
-.product-info h1 {
-  margin-top: 0;
-}
-.price {
-  font-size: 2em;
-  font-weight: bold;
-  color: #3498db;
-}
-.add-to-cart-btn {
-  padding: 15px 30px;
-  font-size: 1em;
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-</style>

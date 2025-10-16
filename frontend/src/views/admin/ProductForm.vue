@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "../../api/axios"; // axios වෙනුවට apiClient පාවිච්චි කරන්න
 
 const route = useRoute();
 const router = useRouter();
@@ -12,47 +12,84 @@ const productData = ref({
   description: "",
   price: "",
   color: "",
-  image_url: "https://placehold.co/600x400",
+  image_url: null,
 });
 
-// දැන් තියෙන්නේ "Edit" mode එකද කියලා බලනවා (URL එකේ id එකක් තියෙනවද බලලා)
+// --- අලුත් වෙනස්කම් මෙතනින් පටන් ගන්නවා ---
+
+// Validation errors තියාගන්න අලුත් ref එකක්
+const validationErrors = ref({});
+const isLoading = ref(false); // Submit කරද්දී loading state එකක් පෙන්නන්න
+
+// --- අලුත් වෙනස්කම් මෙතනින් ඉවර වෙනවා ---
+
+const imageFile = ref(null);
+function handleFileChange(event) {
+  imageFile.value = event.target.files[0];
+  if (imageFile.value) {
+    // තාවකාලිකව image preview එකක් පෙන්නන්න
+    productData.value.image_url = URL.createObjectURL(imageFile.value);
+  }
+}
+
 const isEditMode = computed(() => !!route.params.id);
 const productId = ref(null);
 
-// Component එක load වුනාම
 onMounted(async () => {
   if (isEditMode.value) {
     productId.value = route.params.id;
-    // Edit mode නම්, පරණ data ටික API එකෙන් අරගෙන form එක පුරවනවා
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/products/${productId.value}`
-      );
+      // Edit mode නම්, apiClient එකෙන් data අරගන්නවා
+      const response = await apiClient.get(`/products/${productId.value}`);
       productData.value = response.data;
     } catch (error) {
       console.error("Failed to fetch product for editing:", error);
+      alert("Could not load product data. Please try again.");
+      router.push("/admin/products");
     }
   }
 });
 
 // Form එක submit කරාම වැඩ කරන function එක
 async function handleSubmit() {
+  // --- අලුත් වෙනස්කම් මෙතනින් පටන් ගන්නවා ---
+  isLoading.value = true;
+  validationErrors.value = {}; // හැම submit එකකදීම පරණ errors අයින් කරනවා
+
+  const formData = new FormData();
+  formData.append("name", productData.value.name);
+  formData.append("description", productData.value.description);
+  formData.append("price", productData.value.price);
+  formData.append("color", productData.value.color);
+
+  if (imageFile.value) {
+    formData.append("image", imageFile.value);
+  }
+
+  if (isEditMode.value) {
+    formData.append("_method", "PUT");
+  }
+
   try {
-    if (isEditMode.value) {
-      // Edit mode නම්, PUT request එකක් යවනවා
-      await axios.put(
-        `http://127.0.0.1:8000/api/products/${productId.value}`,
-        productData.value
-      );
-    } else {
-      // අලුතින් හදනවා නම්, POST request එකක් යවනවා
-      await axios.post("http://127.0.0.1:8000/api/products", productData.value);
-    }
-    // වැඩේ සාර්ථක වුනාම, ආපහු list page එකට යනවා
+    const url = isEditMode.value ? `/products/${productId.value}` : "/products";
+    await apiClient.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
     router.push("/admin/products");
   } catch (error) {
-    console.error("Failed to save product:", error);
-    alert("Failed to save product. Check console for details.");
+    // --- මෙතන තමයි වැදගත්ම දේ වෙන්නේ ---
+    if (error.response && error.response.status === 422) {
+      // Laravel එකෙන් එවන validation errors ටික validationErrors ref එකට දාගන්නවා
+      validationErrors.value = error.response.data.errors;
+    } else {
+      console.error("Failed to save product:", error);
+      alert("An unexpected error occurred. Please check the console.");
+    }
+  } finally {
+    isLoading.value = false; // අවසානයේ loading state එක අයින් කරනවා
   }
 }
 </script>
@@ -77,9 +114,14 @@ async function handleSubmit() {
           type="text"
           id="name"
           class="w-full px-3 py-2 border rounded"
-          required
+          :class="{ 'border-red-500': validationErrors.name }"
         />
+        <!-- Validation error message එක මෙතන පෙන්නනවා -->
+        <p v-if="validationErrors.name" class="text-red-500 text-xs mt-1">
+          {{ validationErrors.name[0] }}
+        </p>
       </div>
+
       <!-- Description -->
       <div class="mb-4">
         <label for="description" class="block text-gray-700 font-semibold mb-2"
@@ -90,9 +132,16 @@ async function handleSubmit() {
           id="description"
           rows="4"
           class="w-full px-3 py-2 border rounded"
-          required
+          :class="{ 'border-red-500': validationErrors.description }"
         ></textarea>
+        <p
+          v-if="validationErrors.description"
+          class="text-red-500 text-xs mt-1"
+        >
+          {{ validationErrors.description[0] }}
+        </p>
       </div>
+
       <!-- Price -->
       <div class="mb-4">
         <label for="price" class="block text-gray-700 font-semibold mb-2"
@@ -104,9 +153,13 @@ async function handleSubmit() {
           step="0.01"
           id="price"
           class="w-full px-3 py-2 border rounded"
-          required
+          :class="{ 'border-red-500': validationErrors.price }"
         />
+        <p v-if="validationErrors.price" class="text-red-500 text-xs mt-1">
+          {{ validationErrors.price[0] }}
+        </p>
       </div>
+
       <!-- Color -->
       <div class="mb-4">
         <label for="color" class="block text-gray-700 font-semibold mb-2"
@@ -117,21 +170,35 @@ async function handleSubmit() {
           type="text"
           id="color"
           class="w-full px-3 py-2 border rounded"
-          required
+          :class="{ 'border-red-500': validationErrors.color }"
         />
+        <p v-if="validationErrors.color" class="text-red-500 text-xs mt-1">
+          {{ validationErrors.color[0] }}
+        </p>
       </div>
-      <!-- Image URL -->
+
+      <!-- Image input -->
       <div class="mb-4">
-        <label for="image_url" class="block text-gray-700 font-semibold mb-2"
-          >Image URL</label
+        <label for="image" class="block text-gray-700 font-semibold mb-2"
+          >Product Image</label
         >
         <input
-          v-model="productData.image_url"
-          type="url"
-          id="image_url"
+          @change="handleFileChange"
+          type="file"
+          id="image"
           class="w-full px-3 py-2 border rounded"
-          required
+          :class="{ 'border-red-500': validationErrors.image }"
         />
+        <p v-if="validationErrors.image" class="text-red-500 text-xs mt-1">
+          {{ validationErrors.image[0] }}
+        </p>
+        <div v-if="productData.image_url" class="mt-2">
+          <p class="text-sm text-gray-500 mb-1">Current Image Preview:</p>
+          <img
+            :src="productData.image_url"
+            class="w-32 h-32 object-cover rounded"
+          />
+        </div>
       </div>
 
       <!-- Buttons -->
@@ -144,9 +211,10 @@ async function handleSubmit() {
         </router-link>
         <button
           type="submit"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+          :disabled="isLoading"
         >
-          {{ isEditMode ? "Update Product" : "Create Product" }}
+          {{ isLoading ? "Saving..." : (isEditMode ? "Update Product" : "Create Product") }}
         </button>
       </div>
     </form>
