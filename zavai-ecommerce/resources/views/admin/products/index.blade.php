@@ -97,7 +97,7 @@
                     <td>{{ $product->sku }}</td>
                     <td>Rs. {{ number_format($product->price, 2) }}</td>
                     <td>
-                        <a href="#">Edit</a>
+                        <a href="{{ route('admin.products.edit', $product->id) }}">Edit</a>
                         <a href="#">Delete</a>
                     </td>
                 </tr>
