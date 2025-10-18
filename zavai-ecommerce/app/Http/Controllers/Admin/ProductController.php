@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.products.create');
     }
 
     /**
@@ -30,7 +30,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'sku' => 'required|max:255|unique:products', // sku එක products table එකේ unique වෙන්න ඕන
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ]);
+
+        Product::create($validatedData);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Product created successfully!');
     }
 
     /**
