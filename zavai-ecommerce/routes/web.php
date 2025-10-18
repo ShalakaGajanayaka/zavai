@@ -33,6 +33,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
 require __DIR__ . '/auth.php';
