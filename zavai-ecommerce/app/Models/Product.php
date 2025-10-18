@@ -19,6 +19,6 @@ class Product extends Model
         'sku',
         'price',
         'description',
-        // image_path අපි පස්සේ එකතු කරමු
+        'image_path',
     ];
 }

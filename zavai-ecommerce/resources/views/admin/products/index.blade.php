@@ -87,6 +87,7 @@
                     <th>Name</th>
                     <th>SKU</th>
                     <th>Price</th>
+                    <th>Image</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -96,6 +97,13 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->sku }}</td>
                     <td>Rs. {{ number_format($product->price, 2) }}</td>
+                    <td>
+                        @if ($product->image_path)
+                        <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" width="60">
+                        @else
+                        No Image
+                        @endif
+                    </td>
                     <td style="display: flex; gap: 10px; align-items: center;">
 
                         {{-- Edit Button --}}
@@ -119,7 +127,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" style="text-align: center;">No products found.</td>
+                    <td colspan="5" style="text-align: center;">No products found.</td>
                 </tr>
                 @endforelse
             </tbody>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -26,10 +27,16 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            'sku' => 'required|max:255|unique:products', // sku එක products table එකේ unique වෙන්න ඕන
+            'sku' => 'required|max:255|unique:products',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation rules
         ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image_path'] = $imagePath;
+        }
 
         Product::create($validatedData);
 
@@ -56,7 +63,16 @@ class ProductController extends Controller
             'sku' => ['required', 'max:255', Rule::unique('products')->ignore($product->id)],
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image_path'] = $imagePath;
+        }
 
         $product->update($validatedData);
 

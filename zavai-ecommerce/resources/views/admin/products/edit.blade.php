@@ -85,7 +85,7 @@
         <h1>Edit Product</h1>
 
         <div class="form-card">
-            <form method="POST" action="{{ route('admin.products.update', $product->id) }}">
+            <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data">
                 @method('PATCH')
                 @csrf
 
@@ -112,6 +112,19 @@
                     <textarea id="description" name="description">{{ old('description', $product->description) }}</textarea>
                     @error('description') <div class="error">{{ $message }}</div> @enderror
                 </div>
+
+                <div class="input-group">
+                    <label for="image">Product Image</label>
+                    <input id="image" type="file" name="image">
+                    @error('image') <div class="error">{{ $message }}</div> @enderror
+                </div>
+
+                @if ($product->image_path)
+                <div class="input-group">
+                    <label>Current Image</label>
+                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" width="100">
+                </div>
+                @endif
 
                 <button type="submit" class="button">Update Product</button>
             </form>

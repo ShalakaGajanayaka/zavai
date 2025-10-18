@@ -85,7 +85,7 @@
         <h1>Add New Product</h1>
 
         <div class="form-card">
-            <form method="POST" action="{{ route('admin.products.store') }}">
+            <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <div class="input-group">
@@ -110,6 +110,12 @@
                     <label for="description">Description</label>
                     <textarea id="description" name="description">{{ old('description') }}</textarea>
                     @error('description') <div class="error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="input-group">
+                    <label for="image">Product Image</label>
+                    <input id="image" type="file" name="image">
+                    @error('image') <div class="error">{{ $message }}</div> @enderror
                 </div>
 
                 <button type="submit" class="button">Save Product</button>
