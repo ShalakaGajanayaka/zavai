@@ -104,7 +104,7 @@
                         No Image
                         @endif
                     </td>
-                    <td style="display: flex; gap: 10px; align-items: center;">
+                    <td style="vertical-align: middle;">
 
                         {{-- Edit Button --}}
                         <a href="{{ route('admin.products.edit', $product->id) }}"
@@ -113,7 +113,7 @@
                         </a>
 
                         {{-- Delete Button Form --}}
-                        <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="margin: 0;">
+                        <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="display: inline-block; margin-left: 6px;">
                             @csrf
                             @method('DELETE')
                             <button type="submit"

@@ -112,16 +112,46 @@
                     @error('description') <div class="error">{{ $message }}</div> @enderror
                 </div>
 
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <label for="image">Product Image</label>
                     <input id="image" type="file" name="image">
                     @error('image') <div class="error">{{ $message }}</div> @enderror
+                </div> -->
+
+                <div class="input-group">
+                    <label for="image">Product Image</label>
+                    <input id="image" type="file" name="image" accept="image/*">
+                    @error('image') <div class="error">{{ $message }}</div> @enderror
+
+                    {{-- Image Preview --}}
+                    <div style="margin-top: 15px;">
+                        <img id="imagePreview" src="#" alt="Image Preview"
+                            style="display: none; max-width: 150px; max-height: 150px; border-radius: 6px;">
+                    </div>
                 </div>
 
                 <button type="submit" class="button">Save Product</button>
             </form>
         </div>
     </div>
+
+    <script>
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function(event) {
+            if (event.target.files && event.target.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // Image එක පෙන්වන්න
+                };
+
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+    </script>
 </body>
 
 </html>

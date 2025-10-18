@@ -115,21 +115,40 @@
 
                 <div class="input-group">
                     <label for="image">Product Image</label>
-                    <input id="image" type="file" name="image">
+                    <input id="image" type="file" name="image" accept="image/*">
                     @error('image') <div class="error">{{ $message }}</div> @enderror
-                </div>
 
-                @if ($product->image_path)
-                <div class="input-group">
-                    <label>Current Image</label>
-                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" width="100">
+                    {{-- Image Preview / Current Image --}}
+                    <div style="margin-top: 15px;">
+                        <img id="imagePreview"
+                            src="{{ $product->image_path ? asset('storage/' . $product->image_path) : '#' }}"
+                            alt="Image Preview"
+                            style="max-width: 150px; max-height: 150px; border-radius: 6px; display: {{ $product->image_path ? 'block' : 'none' }};">
+                    </div>
                 </div>
-                @endif
 
                 <button type="submit" class="button">Update Product</button>
             </form>
         </div>
     </div>
+
+    <script>
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function(event) {
+            if (event.target.files && event.target.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+    </script>
 </body>
 
 </html>
