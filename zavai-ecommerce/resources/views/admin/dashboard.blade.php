@@ -58,6 +58,12 @@
     <div class="content">
         <h1>Welcome to the Zavai Admin Dashboard!</h1>
         <p>You have successfully logged in.</p>
+
+        <p>
+            <a href="{{ route('admin.products.index') }}" style="background-color: #10b981; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 20px;">
+                Manage Products
+            </a>
+        </p>
     </div>
 </body>
 
