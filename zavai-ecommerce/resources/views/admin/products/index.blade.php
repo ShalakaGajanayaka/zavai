@@ -96,9 +96,25 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->sku }}</td>
                     <td>Rs. {{ number_format($product->price, 2) }}</td>
-                    <td>
-                        <a href="{{ route('admin.products.edit', $product->id) }}">Edit</a>
-                        <a href="#">Delete</a>
+                    <td style="display: flex; gap: 10px; align-items: center;">
+
+                        {{-- Edit Button --}}
+                        <a href="{{ route('admin.products.edit', $product->id) }}"
+                            style="background-color: #f59e0b; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 14px;">
+                            Edit
+                        </a>
+
+                        {{-- Delete Button Form --}}
+                        <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="margin: 0;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                style="background-color: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 14px; cursor: pointer;"
+                                onclick="return confirm('Are you sure you want to delete this product? This action cannot be undone.')">
+                                Delete
+                            </button>
+                        </form>
+
                     </td>
                 </tr>
                 @empty
