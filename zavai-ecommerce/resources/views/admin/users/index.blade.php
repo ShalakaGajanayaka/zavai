@@ -91,9 +91,17 @@
     </div>
 
     <div class="content">
+        {{-- Success Message --}}
         @if (session('success'))
         <div style="background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
             {{ session('success') }}
+        </div>
+        @endif
+
+        {{-- Error Message --}}
+        @if (session('error'))
+        <div style="background-color: #fee2e2; color: #991b1b; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            {{ session('error') }}
         </div>
         @endif
 
@@ -121,9 +129,28 @@
                         <span class="badge badge-{{ $user->role }}">{{ ucfirst($user->role) }}</span>
                     </td>
                     <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                    <td>
-                        <a href="#">Edit</a>
-                        <a href="#">Delete</a>
+                    <td style="vertical-align: middle;">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            {{-- Edit Button --}}
+                            <a href="{{ route('admin.users.edit', $user->id) }}"
+                                style="background-color: #f59e0b; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 14px;">
+                                Edit
+                            </a>
+
+                            {{-- Delete Button Form --}}
+                            {{-- Admin ට තමන්වම delete කරගන්න බැරි වෙන්න check එකක් --}}
+                            @if (auth()->user()->id !== $user->id)
+                            <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    style="background-color: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 14px; cursor: pointer;"
+                                    onclick="return confirm('Are you sure you want to delete this user?')">
+                                    Delete
+                                </button>
+                            </form>
+                            @endif
+                        </div>
                     </td>
                 </tr>
                 @empty
