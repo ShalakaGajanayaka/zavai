@@ -20,8 +20,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'is_admin' => \App\Http\Middleware\IsAdmin::class,
+            'admin.access' => \App\Http\Middleware\AdminAccessMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
     })
+     ->withProviders([
+        \App\Providers\AuthServiceProvider::class,
+    ])
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (AuthenticationException $e, Request $request) {
             if ($request->is('admin', 'admin/*')) {

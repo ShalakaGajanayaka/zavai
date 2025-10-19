@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserManagementController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -36,7 +37,13 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+    // Common for both admin & staff
     Route::resource('/products', ProductController::class);
+
+    // Only admins can access user management
+    Route::middleware('can:manage-users')->group(function () {
+        Route::resource('/users', UserManagementController::class);
+    });
 });
 
 require __DIR__ . '/auth.php';

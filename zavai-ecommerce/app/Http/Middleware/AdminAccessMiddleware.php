@@ -6,12 +6,13 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAdmin
+class AdminAccessMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !in_array(auth()->user()->role, ['admin', 'staff'])) {
-            abort(403, 'Unauthorized.');
+        // Allow both admin and staff roles
+        if (!in_array($request->user()->role, ['admin', 'staff'])) {
+            abort(403, 'Unauthorized');
         }
 
         return $next($request);
