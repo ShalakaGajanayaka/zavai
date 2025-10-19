@@ -28,10 +28,15 @@ const cartTotal = computed(() => {
     return total.toFixed(2);
 });
 
-// දැනට form එක submit කරන්නේ නැහැ
 const submit = () => {
-    // අපි මේක ඊළඟ පියවරේදී හදමු
-    alert("Placing order...");
+    form.post(route('checkout.store'), {
+        onError: () => {
+            // Handle validation errors if any
+        },
+        onSuccess: () => {
+            // Backend එකෙන් redirect කරන නිසා මෙතනට විශේෂ දෙයක් ඕන නෑ
+        }
+    });
 };
 </script>
 

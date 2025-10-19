@@ -53,5 +53,7 @@ Route::delete('/cart/{product}', [CartController::class, 'destroy'])->name('cart
 Route::patch('/cart/{product}', [CartController::class, 'update'])->name('cart.update');
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 require __DIR__ . '/auth.php';
