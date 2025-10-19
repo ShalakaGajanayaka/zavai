@@ -82,6 +82,13 @@
     </div>
 
     <div class="content">
+        {{-- Success Message --}}
+        @if (session('success'))
+        <div style="background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            {{ session('success') }}
+        </div>
+        @endif
+
         <h1>Order Details: #{{ $order->id }}</h1>
 
         <div class="grid">
@@ -96,6 +103,23 @@
                 <h3>Order Summary</h3>
                 <div class="detail-item"><strong>Order Date:</strong> {{ $order->created_at->format('Y-m-d H:i') }}</div>
                 <div class="detail-item"><strong>Status:</strong> <span style="text-transform: capitalize; font-weight: bold;">{{ $order->status }}</span></div>
+                <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                    @csrf
+                    @method('PATCH')
+                    <label for="status" style="display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #374151;">Change Status:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select name="status" id="status" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd; flex-grow: 1;">
+                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
+                            <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
+                        <button type="submit" style="background-color: #4f46e5; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">Update</button>
+                    </div>
+                    @error('status')
+                    <p style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ $message }}</p>
+                    @enderror
+                </form>
                 <div class="detail-item"><strong>Total Amount:</strong> <strong style="font-size: 18px; color: #1f2937;">Rs. {{ number_format($order->total_amount, 2) }}</strong></div>
             </div>
         </div>
