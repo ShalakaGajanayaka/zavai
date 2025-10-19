@@ -7,9 +7,12 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserManagementController;
-use Inertia\Inertia;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductPageController;
+use App\Http\Controllers\CartController;
+use Inertia\Inertia;
+
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -42,5 +45,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 });
 
 Route::get('/products/{product}', [ProductPageController::class, 'show'])->name('products.show');
+Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
 
 require __DIR__ . '/auth.php';
