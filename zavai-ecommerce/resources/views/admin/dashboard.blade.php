@@ -69,6 +69,11 @@
                 Manage Users & Staff
             </a>
         </p>
+        <p>
+            <a href="{{ route('admin.orders.index') }}" style="background-color: #3b82f6; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 10px;">
+                Manage Orders
+            </a>
+        </p>
     </div>
 </body>
 
