@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserManagementController;
 use Inertia\Inertia;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductPageController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -39,5 +40,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
         Route::resource('/users', UserManagementController::class);
     });
 });
+
+Route::get('/products/{product}', [ProductPageController::class, 'show'])->name('products.show');
 
 require __DIR__ . '/auth.php';
