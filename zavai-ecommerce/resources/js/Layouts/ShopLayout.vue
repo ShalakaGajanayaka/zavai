@@ -35,7 +35,7 @@ import { Link } from "@inertiajs/vue3";
                                 >Register</Link
                             >
                             <Link
-                                href="#"
+                                :href="route('cart.index')"
                                 class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
                             >
                                 Cart ({{ $page.props.cart.count }})

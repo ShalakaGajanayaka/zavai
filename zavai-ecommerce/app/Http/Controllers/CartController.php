@@ -4,15 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        $cartItems = session()->get('cart', []);
+
+        return Inertia::render('Frontend/Cart/Index', [
+            'cartItems' => $cartItems
+        ]);
+    }
+
     public function store(Request $request, Product $product)
     {
         $cart = session()->get('cart', []);
 
         if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity']++; 
+            $cart[$product->id]['quantity']++;
         } else {
             $cart[$product->id] = [
                 "name" => $product->name,

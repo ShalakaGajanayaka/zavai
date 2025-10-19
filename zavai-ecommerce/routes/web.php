@@ -46,5 +46,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 Route::get('/products/{product}', [ProductPageController::class, 'show'])->name('products.show');
 Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
 require __DIR__ . '/auth.php';
