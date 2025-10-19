@@ -75,9 +75,56 @@ const isCartEmpty = computed(() => {
                                                 Rs. {{ item.price }}
                                             </p>
                                         </div>
-                                        <p class="mt-2 text-sm text-gray-500">
-                                            Quantity: {{ item.quantity }}
-                                        </p>
+                                        <div class="flex items-center text-sm">
+                                            <span class="text-gray-500 mr-2"
+                                                >Qty:</span
+                                            >
+                                            <div class="flex items-center">
+                                                <Link
+                                                    :href="
+                                                        route(
+                                                            'cart.update',
+                                                            productId
+                                                        )
+                                                    "
+                                                    :data="{
+                                                        quantity:
+                                                            item.quantity - 1,
+                                                    }"
+                                                    method="patch"
+                                                    as="button"
+                                                    preserve-scroll
+                                                    :disabled="
+                                                        item.quantity <= 1
+                                                    "
+                                                    class="px-2 py-0 border rounded-l disabled:opacity-50"
+                                                    >-</Link
+                                                >
+
+                                                <span
+                                                    class="px-3 py-0 border-t border-b"
+                                                    >{{ item.quantity }}</span
+                                                >
+
+                                                <Link
+                                                    :href="
+                                                        route(
+                                                            'cart.update',
+                                                            productId
+                                                        )
+                                                    "
+                                                    :data="{
+                                                        quantity:
+                                                            item.quantity + 1,
+                                                    }"
+                                                    method="patch"
+                                                    as="button"
+                                                    preserve-scroll
+                                                    class="px-2 py-0 border rounded-r"
+                                                    >+</Link
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="ml-4">

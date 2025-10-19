@@ -49,5 +49,6 @@ Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.sto
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::delete('/cart/{product}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::patch('/cart/{product}', [CartController::class, 'update'])->name('cart.update');
 
 require __DIR__ . '/auth.php';
