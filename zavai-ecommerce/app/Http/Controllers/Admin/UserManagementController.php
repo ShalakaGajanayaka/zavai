@@ -14,11 +14,9 @@ class UserManagementController extends Controller
     public function index()
     {
         // Only show all users (for admin only)
-        $users = User::all();
+        $users = User::latest()->get();
 
-        return inertia('Admin/Users/Index', [
-            'users' => $users
-        ]);
+        return view('admin.users.index', compact('users'));
     }
 
     /**

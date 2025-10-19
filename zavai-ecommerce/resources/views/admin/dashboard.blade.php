@@ -64,6 +64,11 @@
                 Manage Products
             </a>
         </p>
+        <p>
+            <a href="{{ route('admin.users.index') }}" style="background-color: #f59e0b; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 10px;">
+                Manage Users & Staff
+            </a>
+        </p>
     </div>
 </body>
 
