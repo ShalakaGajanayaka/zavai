@@ -91,9 +91,15 @@
     </div>
 
     <div class="content">
+        @if (session('success'))
+        <div style="background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            {{ session('success') }}
+        </div>
+        @endif
+
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Manage Users</h1>
-            <a href="#" class="button">Add New Staff</a>
+            <a href="{{ route('admin.users.create') }}" class="button">Add New Staff</a>
         </div>
 
         <table>
