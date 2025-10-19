@@ -16,17 +16,39 @@ import { Link } from "@inertiajs/vue3";
                     </div>
 
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
-                        <div v-if="$page.props.auth.user">
+                        <Link
+                            :href="route('cart.index')"
+                            class="font-semibold text-gray-600 hover:text-gray-900"
+                        >
+                            Cart ({{ $page.props.cart.count }})
+                        </Link>
+
+                        <div
+                            v-if="$page.props.auth.user"
+                            class="ms-4 flex items-center"
+                        >
+                            <span class="text-sm text-gray-700 mr-4"
+                                >Welcome, {{ $page.props.auth.user.name }}</span
+                            >
                             <Link
                                 :href="route('dashboard')"
                                 class="font-semibold text-gray-600 hover:text-gray-900"
-                                >Dashboard</Link
+                                >My Account</Link
+                            >
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                as="button"
+                                type="button"
+                                class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
+                                >Log Out</Link
                             >
                         </div>
+
                         <template v-else>
                             <Link
                                 :href="route('login')"
-                                class="font-semibold text-gray-600 hover:text-gray-900"
+                                class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
                                 >Log in</Link
                             >
                             <Link
@@ -34,12 +56,6 @@ import { Link } from "@inertiajs/vue3";
                                 class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
                                 >Register</Link
                             >
-                            <Link
-                                :href="route('cart.index')"
-                                class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
-                            >
-                                Cart ({{ $page.props.cart.count }})
-                            </Link>
                         </template>
                     </div>
                 </div>

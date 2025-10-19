@@ -29,6 +29,14 @@ const isCartEmpty = computed(() => {
     <ShopLayout>
         <div class="bg-white">
             <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+                <div
+                    v-if="$page.props.flash && $page.props.flash.error"
+                    class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
+                    role="alert"
+                >
+                    <p>{{ $page.props.flash.error }}</p>
+                </div>
+
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">
                     Shopping Cart
                 </h1>
@@ -169,12 +177,11 @@ const isCartEmpty = computed(() => {
                             </dl>
 
                             <div class="mt-6">
-                                <button
-                                    type="submit"
-                                    class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                <Link
+                                    :href="route('checkout.index')"
+                                    class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                    >Checkout</Link
                                 >
-                                    Checkout
-                                </button>
                             </div>
                         </div>
                     </section>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductPageController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use Inertia\Inertia;
 
 
@@ -50,5 +51,7 @@ Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.sto
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::delete('/cart/{product}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::patch('/cart/{product}', [CartController::class, 'update'])->name('cart.update');
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
 require __DIR__ . '/auth.php';
