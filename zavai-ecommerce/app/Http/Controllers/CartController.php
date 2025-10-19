@@ -36,4 +36,17 @@ class CartController extends Controller
 
         return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
+
+    public function destroy(Request $request, Product $product)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$product->id])) {
+            unset($cart[$product->id]);
+        }
+
+        session()->put('cart', $cart);
+
+        return redirect()->back()->with('success', 'Product removed from cart.');
+    }
 }

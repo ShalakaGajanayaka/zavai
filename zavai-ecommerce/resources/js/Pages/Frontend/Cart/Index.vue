@@ -80,17 +80,17 @@ const isCartEmpty = computed(() => {
                                         </p>
                                     </div>
 
-                                    <div
-                                        class="mt-4 flex flex-1 items-end justify-between"
-                                    >
-                                        <div class="ml-4">
-                                            <button
-                                                type="button"
-                                                class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                                            >
-                                                <span>Remove</span>
-                                            </button>
-                                        </div>
+                                    <div class="ml-4">
+                                        <Link
+                                            :href="
+                                                route('cart.destroy', productId)
+                                            "
+                                            method="delete"
+                                            as="button"
+                                            class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                        >
+                                            <span>Remove</span>
+                                        </Link>
                                     </div>
                                 </div>
                             </li>
