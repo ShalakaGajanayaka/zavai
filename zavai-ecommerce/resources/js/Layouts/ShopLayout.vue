@@ -36,6 +36,11 @@ import { Link } from "@inertiajs/vue3";
                                 >My Account</Link
                             >
                             <Link
+                                :href="route('orders.history')"
+                                class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
+                                >My Orders</Link
+                            >
+                            <Link
                                 :href="route('logout')"
                                 method="post"
                                 as="button"
