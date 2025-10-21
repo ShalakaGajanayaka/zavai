@@ -25,29 +25,35 @@ import { Link } from "@inertiajs/vue3";
 
                         <div
                             v-if="$page.props.auth.user"
-                            class="ms-4 flex items-center"
+                            class="flex items-center gap-1"
                         >
-                            <span class="text-sm text-gray-700 mr-4"
+                            <span class="text-sm text-gray-500 mr-2"
                                 >Welcome, {{ $page.props.auth.user.name }}</span
                             >
+
                             <Link
                                 :href="route('dashboard')"
-                                class="font-semibold text-gray-600 hover:text-gray-900"
-                                >My Account</Link
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
                             >
+                                My Account
+                            </Link>
+
                             <Link
                                 :href="route('orders.history')"
-                                class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
-                                >My Orders</Link
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
                             >
+                                My Orders
+                            </Link>
+
                             <Link
                                 :href="route('logout')"
                                 method="post"
                                 as="button"
                                 type="button"
-                                class="ms-4 font-semibold text-gray-600 hover:text-gray-900"
-                                >Log Out</Link
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
                             >
+                                Log Out
+                            </Link>
                         </div>
 
                         <template v-else>
