@@ -10,12 +10,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // අලුත්ම products ටික උඩින්ම එන විදිහට database එකෙන් ගන්නවා
-        $products = Product::latest()->get();
+        $featuredProducts = Product::latest()->take(4)->get();
 
-        // 'Frontend/Home' කියන Vue component එකට, $products ටිකත් එක්ක යවනවා
         return Inertia::render('Frontend/Home', [
-            'products' => $products
+            'featuredProducts' => $featuredProducts
         ]);
     }
 }

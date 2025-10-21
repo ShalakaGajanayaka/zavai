@@ -21,4 +21,9 @@ class Product extends Model
         'description',
         'image_path',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

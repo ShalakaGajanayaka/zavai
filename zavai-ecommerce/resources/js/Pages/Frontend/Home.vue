@@ -1,10 +1,11 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 import ShopLayout from "@/Layouts/ShopLayout.vue";
+import Button from "@/Components/ui/Button.vue";
 
-// Laravel controller එකෙන් එවන 'products' data ටික props විදිහට භාරගන්නවා
+// Controller එකෙන් එවන 'featuredProducts' data ටික props විදිහට භාරගන්නවා
 defineProps({
-    products: Array,
+    featuredProducts: Array,
 });
 </script>
 
@@ -12,19 +13,41 @@ defineProps({
     <Head title="Welcome to Zavai" />
 
     <ShopLayout>
-        <div class="bg-gray-50">
+        <div class="relative bg-gray-900">
+            <div
+                aria-hidden="true"
+                class="absolute inset-0 overflow-hidden"
+            ></div>
+            <div
+                class="relative mx-auto flex max-w-3xl flex-col items-center px-6 py-32 text-center sm:py-64 lg:px-0"
+            >
+                <h1
+                    class="text-4xl font-bold tracking-tight text-white lg:text-6xl"
+                >
+                    Welcome to Zavai
+                </h1>
+                <p class="mt-4 text-xl text-white">
+                    The new generation of style is here. Discover our latest
+                    collection and redefine your look.
+                </p>
+                <div class="mt-8">
+                    <Button as="a" href="#" size="lg">Shop New Arrivals</Button>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white">
             <div
                 class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
             >
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900">
-                    Our Latest Collection
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900">
+                    New Arrivals
                 </h2>
 
                 <div
-                    class="mt-8 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
+                    class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
                 >
                     <Link
-                        v-for="product in products"
+                        v-for="product in featuredProducts"
                         :key="product.id"
                         :href="route('products.show', product.id)"
                         class="group"
