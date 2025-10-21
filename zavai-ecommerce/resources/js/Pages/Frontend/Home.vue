@@ -35,12 +35,16 @@ console.log('Categories received:', props.categories);
         <!-- Debug: Show categories count -->
         <div v-if="!categories || categories.length === 0" class="bg-white py-16 text-center">
             <p class="text-gray-500">No categories with products found.</p>
-            <p class="text-sm text-gray-400 mt-2">Categories count: {{ categories ? categories.length : 'undefined' }}</p>
+            <p class="text-sm text-gray-400 mt-2">Categories count: {{ categories ? categories.length : 'undefined' }}
+            </p>
         </div>
-        
+
         <div v-for="category in categories" :key="category.id" class="bg-white">
             <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ category.name }}</h2>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900">
+                    <Link :href="route('category.show', category.slug)" class="hover:text-indigo-600">{{ category.name
+                    }}</Link>
+                </h2>
 
                 <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 
