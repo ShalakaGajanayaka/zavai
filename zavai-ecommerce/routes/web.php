@@ -58,6 +58,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
+Route::get('/products', [ProductPageController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductPageController::class, 'show'])->name('products.show');
 Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
 
