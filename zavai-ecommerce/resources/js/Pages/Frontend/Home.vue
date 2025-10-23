@@ -115,7 +115,7 @@ const isOnSale = () => {
 
     <ShopLayout>
         <!-- Home Page Header Start -->
-        <div class="relative bg-gray-900 h-[36rem] sm:h-[40rem] lg:h-[44rem] overflow-hidden">
+        <div class="home-page-hero relative bg-gray-900 h-[36rem] sm:h-[40rem] lg:h-[44rem] overflow-hidden">
             <TransitionGroup name="fade" tag="div">
                 <div v-for="(slide, index) in slides" :key="index" v-show="index === currentSlide"
                     class="absolute inset-0">
@@ -165,6 +165,7 @@ const isOnSale = () => {
             </div>
         </div>
         <!-- Home Page Header End -->
+         
         <!-- Debug: Show categories count -->
         <div v-if="!categories || categories.length === 0" class="bg-white py-16 text-center">
             <p class="text-gray-500">No categories with products found.</p>
