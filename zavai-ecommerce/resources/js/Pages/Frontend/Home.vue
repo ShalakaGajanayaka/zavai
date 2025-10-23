@@ -173,12 +173,13 @@ const isOnSale = () => {
             </p>
         </div>
 
+        <!-- Category Section Start -->
         <div v-for="(category, categoryIndex) in categories" :key="category.id" class="bg-white">
-            <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
                 <!-- Category Header with Enhanced Styling -->
-                <div class="mb-8">
+                <div class="mb-6">
                     <div class="flex items-center gap-4 mb-2">
-                        <h2 class="text-3xl font-bold tracking-tight text-gray-900">
+                        <h2 class="text-4xl font-bold tracking-tight text-gray-900">
                             {{ category.name }}
                         </h2>
                         <Badge variant="secondary" class="text-sm px-3 py-1">
@@ -186,13 +187,13 @@ const isOnSale = () => {
                         </Badge>
                     </div>
                     <Link :href="route('products.index', { category: category.slug })" 
-                          class="text-sm text-indigo-600 hover:text-indigo-800 hover:underline transition-colors duration-200">
+                          class="text-base text-indigo-600 hover:text-indigo-800 hover:underline transition-colors duration-200 font-medium">
                         View All →
                     </Link>
                 </div>
 
                 <!-- Enhanced Product Grid with Better Responsive Design -->
-                <div class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
                     <div v-for="product in category.products" :key="product.id" class="group">
                         <Card class="overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-0 shadow-md relative">
@@ -240,19 +241,19 @@ const isOnSale = () => {
                             </Link>
                             
                             <!-- Enhanced Product Info -->
-                            <CardContent class="p-5">
+                            <CardContent class="p-6">
                                 <Link :href="route('products.show', product.id)">
-                                    <CardTitle class="text-lg font-semibold tracking-tight text-gray-900 line-clamp-2 mb-3 group-hover:text-indigo-600 transition-colors duration-200">
+                                    <CardTitle class="text-xl font-bold tracking-tight text-gray-900 line-clamp-2 mb-4 group-hover:text-indigo-600 transition-colors duration-200 min-h-[3.5rem]">
                                         {{ product.name }}
                                     </CardTitle>
                                 </Link>
                                 
                                 <!-- Rating Stars -->
-                                <div class="flex items-center gap-2 mb-3">
+                                <div class="flex items-center gap-2 mb-4">
                                     <div class="flex items-center">
                                         <template v-for="star in 5" :key="star">
                                             <svg 
-                                                class="h-4 w-4" 
+                                                class="h-5 w-5" 
                                                 :class="star <= Math.floor(getRandomRating()) ? 'text-yellow-400 fill-current' : 'text-gray-300'"
                                                 viewBox="0 0 24 24"
                                             >
@@ -260,22 +261,22 @@ const isOnSale = () => {
                                             </svg>
                                         </template>
                                     </div>
-                                    <span class="text-sm text-gray-500">{{ getRandomRating() }}</span>
+                                    <span class="text-sm font-semibold text-gray-600">{{ getRandomRating() }}</span>
                                     <span class="text-sm text-gray-400">({{ Math.floor(Math.random() * 100) + 10 }})</span>
                                 </div>
                                 
                                 <!-- Price and Action Section -->
-                                <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center justify-between mb-4">
                                     <div class="flex flex-col">
                                         <div class="flex items-center gap-2">
-                                            <p class="text-xl font-bold text-gray-900">
+                                            <p class="text-2xl font-bold text-gray-900">
                                                 Rs. {{ product.price }}
                                             </p>
-                                            <p v-if="isOnSale()" class="text-sm text-gray-500 line-through">
+                                            <p v-if="isOnSale()" class="text-base text-gray-500 line-through">
                                                 Rs. {{ Math.floor(product.price * 1.3) }}
                                             </p>
                                         </div>
-                                        <p class="text-sm text-gray-500">Free shipping</p>
+                                        <p class="text-sm text-green-600 font-medium">Free shipping</p>
                                     </div>
                                 </div>
                                 
@@ -283,10 +284,9 @@ const isOnSale = () => {
                                 <Button 
                                     @click="addToCart(product.id, $event)"
                                     variant="default" 
-                                    size="sm" 
-                                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300"
+                                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 py-6 text-base font-semibold"
                                 >
-                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
                                     </svg>
                                     Add to Cart
@@ -298,15 +298,16 @@ const isOnSale = () => {
                 </div>
                 
                 <!-- Category Separator -->
-                <div v-if="categoryIndex < categories.length - 1" class="mt-16">
-                    <Separator class="mx-auto max-w-2xl" />
+                <div v-if="categoryIndex < categories.length - 1" class="mt-6">
+                    <Separator />
                 </div>
             </div>
         </div>
+        <!-- Category Section End -->
         
         <!-- Final Section Separator -->
         <div class="bg-white">
-            <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
                 <Separator />
             </div>
         </div>

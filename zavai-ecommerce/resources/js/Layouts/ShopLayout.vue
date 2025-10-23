@@ -125,19 +125,22 @@ onUnmounted(() => {
                         </Button>
 
                         <!-- Cart with Enhanced Badge -->
-                        <Link :href="route('cart.index')" 
-                              class="relative group">
+                        <Link :href="route('cart.index')">
                             <Button variant="ghost" size="sm" class="relative">
-                                <svg class="h-6 w-6 text-gray-700 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                </svg>
-                                <Badge v-if="$page.props.cart.count > 0" 
-                                       variant="destructive" 
-                                       class="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs font-bold animate-pulse">
-                                    {{ $page.props.cart.count }}
-                                </Badge>
+                                <div class="flex items-center gap-2">
+                                    <div class="relative">
+                                        <svg class="h-6 w-6 text-gray-700 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                        </svg>
+                                        <Badge v-if="$page.props.cart.count > 0" 
+                                               variant="destructive" 
+                                               class="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center text-xs font-bold animate-pulse">
+                                            {{ $page.props.cart.count }}
+                                        </Badge>
+                                    </div>
+                                    <span class="hidden xl:inline text-sm font-medium">Cart</span>
+                                </div>
                             </Button>
-                            <span class="hidden xl:inline text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors">Cart</span>
                         </Link>
 
                         <!-- User Menu - Compact -->
